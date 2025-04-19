@@ -5,7 +5,7 @@ import Hub
 extension AutoTokenizer {
     /// Load the tokenizer from a cache when offline.
     /// Workaround until https://github.com/huggingface/swift-transformers/issues/39
-    static func from(
+    public static func from(
         cached model: String,
         hubApi: HubApi = .shared
     ) async throws -> Tokenizer {
@@ -29,11 +29,11 @@ enum TokenizerError : Error {
 }
 
 extension HubApi {
-    static var defaultTokenLocation: URL {
+    public static var defaultTokenLocation: URL {
         FileManager.default.homeDirectoryForCurrentUser.appending(path: ".cache/huggingface/token")
     }
 
-    static func defaultToken() -> String? {
+    public static func defaultToken() -> String? {
         if let envToken = ProcessInfo.processInfo.environment["HF_TOKEN"] {
             return envToken
         }

@@ -4,7 +4,7 @@ import OSLog
 
 /// ModelPipeline manages the forward pass for an LLM that
 /// has been split across many MLModels.
-class ModelPipeline {
+public class ModelPipeline {
     let chunks: [PipelineChunk]
     var inferenceConfiguration: PipelineInferenceConfiguration? // Can't retrieve this until models are loaded.
     let cacheProcessorModel: DeferredModel
@@ -46,7 +46,7 @@ class ModelPipeline {
         print()
     }
 
-    func load() throws {
+    public func load() throws {
         prewarm()
         print("Loading models  : ", terminator: "")
         fflush(stdout)
@@ -72,7 +72,7 @@ class ModelPipeline {
         }
     }
 
-    func predict(tokens initialTokens: [Int], maxNewTokens: Int) throws -> AsyncThrowingStream<Prediction, Error> {
+    public func predict(tokens initialTokens: [Int], maxNewTokens: Int) throws -> AsyncThrowingStream<Prediction, Error> {
         guard let inferenceConfiguration else {
             throw PipelineError.unsupportedInferenceConfiguration
         }
@@ -151,7 +151,7 @@ class ModelPipeline {
 
 
 extension ModelPipeline: CustomDebugStringConvertible {
-    var debugDescription: String {
+    public var debugDescription: String {
         let fileName = chunks.first?.fileInfo.displayModelName ?? "<unknown>"
         return"\(Self.self) \(fileName) (\(chunks.count) chunks)"
     }
@@ -161,7 +161,7 @@ extension ModelPipeline {
     /// Creates a pipeline from the mlmodelc files in the given folder.
     /// Model files should follow the format: `${MODEL_PREFIX}_chunk${CHUNK_NUMBER}.mlmodelc`
     /// Does not load the model.
-    class func from(
+    public class func from(
         folder: URL,
         modelPrefix: String?,
         cacheProcessorModelName: String,
@@ -302,7 +302,7 @@ struct ChunkFileInfo {
     }
 }
 
-enum PipelineError: Error {
+public enum PipelineError: Error {
     case unsupportedInferenceConfiguration
     case cacheProcessorNotFound
     case modelChunksNotFound
@@ -310,11 +310,11 @@ enum PipelineError: Error {
     case notImplementedError
 }
 
-struct Prediction {
-    let newToken: Int
-    let allTokens: [Int]
-    let latency: Measurement<UnitDuration>?
-    let promptLatency: Measurement<UnitDuration>?
+public struct Prediction {
+    public let newToken: Int
+    public let allTokens: [Int]
+    public let latency: Measurement<UnitDuration>?
+    public let promptLatency: Measurement<UnitDuration>?
 }
 
 struct CodeTimer {
